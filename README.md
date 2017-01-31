@@ -26,7 +26,7 @@ databases
 main.go  
   
 ```
-![Architecture](https://s3-sa-east-1.amazonaws.com/todovapersonal/golang-architecture.png)
+![Architecture](http://s3-sa-east-1.amazonaws.com/todovapersonal/golang-architecture.png)
 
 ##api
    api package contains all the REST API routes where validations will be done in validations package with same file name and same function names as in api package. This validations will be done through MIDDLEWARE concept.

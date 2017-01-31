@@ -12,6 +12,28 @@ go run main.go
 ```
 Note: Import golang vendors if required.
 
+#REST Routes
+##Register User
+POST->user/register
+```
+ {
+  "email":"bathula@gmail.com",
+  "password":"dlf"  
+}
+```
+
+##Login User
+POST->user/login
+```
+{
+  "email":"bathula@gmail.com",
+  "password":"dlf"
+ 
+}
+```
+
+
+
 ##Love :heart: to hear feedback from you
 RT Bathula-weirdo,coffee lover
 battu.network@gmail.com

@@ -3,39 +3,30 @@ package controllers
 import (
 	// Standard library packages
 	"errors"
-	_"net/url"
-	_"fmt"
 
 	// Third party packages
-	"gopkg.in/mgo.v2/bson"
-	"gopkg.in/mgo.v2"
-	_"github.com/mattbaird/gochimp"
-	_"github.com/rs/xid"
+	"gopkg.in/mgo.v2/bson"	
 
 	//Custom packages
-	"bitbucket.org/golang-project/todova_go_service/app/models"
-	"bitbucket.org/golang-project/todova_go_service/app/helpers"
-	_"bitbucket.org/golang-project/todova_go_service/app/microservices"	
+	"bitbucket.org/rtbathula/golang-project/app/models"
+	"bitbucket.org/rtbathula/golang-project/app/helpers"
+	_"bitbucket.org/rtbathula/golang-project/app/microservices"	
 )
 
 // ****************************************************************************
 // Controllers Logic
 // *****************************************************************************
 
-type AuthAdminResp struct {
-	Admin models.Admin 	`json:"admin"`
-	JwtToken string		`json:"jwtToken"`
-}
-
 func RegisterUser(user models.User) (models.Response,error) {
 
 	var response models.Response
+	var err error
 
 	//Check email already exist
-	query:=bson.M{"email":admin.Details.Email}
+	query:=bson.M{"email":user.Email}
 	queryVisibleFields := bson.M{}
 
-	_, err := models.UserFindOne(query,queryVisibleFields)
+	_, err = models.UserFindOne(query,queryVisibleFields)
 	if (err == nil) {
 		response.Status  = "error"
 		response.Message = "Email already exist"
@@ -43,11 +34,11 @@ func RegisterUser(user models.User) (models.Response,error) {
 	}
 
 	//SET Parameters to user
-	pwdSalt, pwdStr := helpers.EncryptPassword(admin.Details.Password)
+	pwdSalt, pwdStr := helpers.EncryptPassword(user.Password)
 	user.Password = pwdStr
 	user.PasswordSalt = pwdSalt
 
-	user_insert,err := models.UserInsert(user)
+	_,err = models.UserInsert(user)
 	if(err!= nil){
 		response.Status  = "error"
 		response.Message = "failed to register user"
@@ -62,47 +53,33 @@ func RegisterUser(user models.User) (models.Response,error) {
 
 func LoginUser(email string, password string)(models.Response,error){
 
-	queryEmail := bson.M{"details.email":email,"details.userType": "admin"}
-	
-	var queryVisibleFields bson.M
-	queryVisibleFields= make(map[string]interface {})
-	queryVisibleFields["details.createdTime"] = 0
-	queryVisibleFields["details.emailConfirmationToken"] = 0
-	queryVisibleFields["details.createdTime"] = 0
-	queryVisibleFields["details.facebookAccessToken"] = 0
-	queryVisibleFields["details.updatedTime"] = 0
-	queryVisibleFields["details.resetPasswordToken"] = 0	
-	
-	admin,err := models.AdminFindOne(queryEmail,queryVisibleFields)
+	var response models.Response
 
-	if(err!= nil){
-		var response models.Response
+	queryEmail := bson.M{"email":email}		
+	queryVisibleFields := bson.M{}
+	
+	user,err := models.UserFindOne(queryEmail,queryVisibleFields)
+	if(err!= nil){		
 		response.Status  = "error"
 		response.Message = err.Error()
 		return response, err
 	}	
 
-	isValid:=helpers.ValidatePassword(password,admin.Details.PasswordSalt,admin.Details.Password)
+	isValid:=helpers.ValidatePassword(password,user.PasswordSalt,user.Password)
 
-	if(!isValid){
-		var response models.Response
+	if(!isValid){		
 		response.Status  = "error"
 		response.Message = "Invalid Password!"
-		return response, err
-	}		
-
-	var response models.Response
+		return response, errors.New("Invalid Password!")
+	}
+	
 	response.Status  = "success"
-	response.Message = "login successfully!"
-	response.Result.DataType = "json"
+	response.Message = "logged in successfully!"
+	response.Result.DataType = "string"
 
 	/* Create the token */
-	jwtToken,err:=helpers.MakeJwtToken(admin.Id)
-
-	loginResponse := AuthAdminResp{}
-	loginResponse.Admin = admin
-	loginResponse.JwtToken = jwtToken
-
-	response.Result.Data = loginResponse
+	jwtToken,err:=helpers.MakeJwtToken(user.Id)
+	response.Result.Data = jwtToken
+	
 	return response, err
 }

@@ -6,8 +6,7 @@ import (
 	"os"
 	"io/ioutil"
 	"path/filepath"
-	"encoding/json"
-	"encoding/base64"
+	"encoding/json"	
 
 	//Third party packages
 	"github.com/jmoiron/jsonq"

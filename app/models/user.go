@@ -10,19 +10,19 @@ import (
 	"gopkg.in/mgo.v2/bson"
 
     //Custom packages     
-    "bitbucket.org/golang-project/todova_go_service/app/helpers"
-    "bitbucket.org/golang-project/todova_go_service/databases"
+    "bitbucket.org/rtbathula/golang-project/app/helpers"
+    "bitbucket.org/rtbathula/golang-project/databases"
 )
 
 type (
 	// User represents the structure of our resource
 	User struct {
-		Id             bson.ObjectId   `json:"id,omitempty" bson:"_id,omitempty"`		
-		Email        User            `json:"details" bson:"details"`
-		Password        User            `json:"details" bson:"details"`
-		PasswordSalt        User            `json:"details" bson:"details"`
-		CreatedTime          time.Time       `json:"createdTime"             bson:"createdTime"`
-        UpdatedTime          time.Time       `json:"updatedTime"             bson:"updatedTime"`
+		Id             bson.ObjectId    `json:"id,omitempty" bson:"_id,omitempty"`		
+		Email          string            `json:"email" bson:"email"`
+		Password       string            `json:"password" bson:"password"`
+		PasswordSalt   string            `json:"passwordSalt" bson:"passwordSalt"`
+		CreatedTime    time.Time         `json:"createdTime"  bson:"createdTime"`
+        UpdatedTime    time.Time         `json:"updatedTime"  bson:"updatedTime"`
 	}
 )
 
@@ -30,7 +30,7 @@ type (
 // Model Methods
 // *****************************************************************************
 
-func UserInsert(user User) (ser,error) {
+func UserInsert(user User) (User,error) {
 
 	//Get databaseName
 	keysJson      := helpers.GetConfigKeys()

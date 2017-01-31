@@ -14,7 +14,7 @@ import (
     "github.com/aws/aws-sdk-go/aws/awsutil"
 
     //Custom packages
-    "bitbucket.org/golang-project/todova_go_service/app/helpers"
+    "bitbucket.org/rtbathula/golang-project/app/helpers"
 )
 
 func AmazonS3FileUpload(configName string, fileName string, buffer []uint8) (string,error) {

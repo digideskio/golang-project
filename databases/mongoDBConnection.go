@@ -7,7 +7,7 @@ import (
     "gopkg.in/mgo.v2"
 
     //Custom packages  
-    "bitbucket.org/CarlaRod/todova_go_service/app/helpers"
+    "bitbucket.org/rtbathula/golang-project/app/helpers"
 
 )
 
@@ -35,35 +35,3 @@ func ConnectDB(){
 func GetMongoSession() *mgo.Session{
     return mongoSession
 }
-
-func CreateIndexes(collectionName string, params map[string]string)  {
-
-    //Get databaseName
-    keysJson        := helpers.GetConfigKeys()
-    envVariable     := helpers.GetEnvVariable()
-    databaseName, _ := keysJson.String(envVariable,"databaseName")
-
-    //Get mongoSession
-    sessionCopy := mongoSession.Copy()
-    defer sessionCopy.Close()
-
-    col := sessionCopy.DB(databaseName).C(collectionName)
-
-    keys := []string{}
-
-    for key, value := range params {
-        keys = append(keys, key+":"+value)
-    }
-
-    index := mgo.Index{
-        Key: keys,
-    }
-
-    err := col.EnsureIndex(index)
-    if err != nil {
-        panic(err)
-    }
-}
-
-
-//Local: mongodb://localhost

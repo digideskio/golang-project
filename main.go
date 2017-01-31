@@ -11,10 +11,9 @@ import (
 	"github.com/rs/cors"
 
 	//Custom packages
-	"bitbucket.org/CarlaRod/todova_go_service/app/api"
-	"bitbucket.org/CarlaRod/todova_go_service/app/helpers"
-	"bitbucket.org/CarlaRod/todova_go_service/databases"
-	"bitbucket.org/CarlaRod/todova_go_service/app/controllers"
+	"bitbucket.org/rtbathula/golang-project/app/api"
+	"bitbucket.org/rtbathula/golang-project/app/helpers"
+	"bitbucket.org/rtbathula/golang-project/databases"	
 )
 
 func main() {

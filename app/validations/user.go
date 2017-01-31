@@ -8,24 +8,22 @@ import (
 	"io"
 	"io/ioutil"
 
-	// Third party packages
-	"github.com/gorilla/mux"
-	"github.com/crowl/rut"
+	// Third party packages		
 	"github.com/asaskevich/govalidator"
 
 	//Custom packages
-	"bitbucket.org/golang-project/todova_go_service/app/models"
+	"bitbucket.org/rtbathula/golang-project/app/models"
 )
 
-func RegisterCustomer(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+func RegisterUser(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 
 	b := bytes.NewBuffer(make([]byte, 0))
 	reader := io.TeeReader(r.Body, b)
 
 	decoder := json.NewDecoder(reader)
 
-	customer := models.Customer{}
-	err := decoder.Decode(&customer)
+	var user models.User
+	err := decoder.Decode(&user)
 
 	r.Body = ioutil.NopCloser(b)
 
@@ -40,7 +38,7 @@ func RegisterCustomer(w http.ResponseWriter, r *http.Request, next http.HandlerF
 		return
 	}
 
-	if (customer.Email == "") {
+	if (user.Email == "") {
 		var response models.Response
 		response.Status  = "error"
 		response.Message = "Email is required"
@@ -51,7 +49,7 @@ func RegisterCustomer(w http.ResponseWriter, r *http.Request, next http.HandlerF
 		return
 	}
 
-	if !govalidator.IsEmail(customer.Email) {
+	if !govalidator.IsEmail(user.Email) {
 		var response models.Response
 		response.Status  = "error"
 		response.Message = "Email is invalid"
@@ -62,7 +60,7 @@ func RegisterCustomer(w http.ResponseWriter, r *http.Request, next http.HandlerF
 		return
 	}
 
-	if (customer.Password == "") {
+	if (user.Password == "") {
 		var response models.Response
 		response.Status  = "error"
 		response.Message = "Password is required"
@@ -76,27 +74,22 @@ func RegisterCustomer(w http.ResponseWriter, r *http.Request, next http.HandlerF
 	next(w,r)
 }
 
-func LoginCustomer(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+func LoginUser(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 
 	b := bytes.NewBuffer(make([]byte, 0))
 	reader := io.TeeReader(r.Body, b)
 
-	type Request struct {
-		Email				string	`json:"email"`
-		Password			string	`json:"password"`		
-	}
-
 	decoder := json.NewDecoder(reader)
 
-	req := Request{}
-	err := decoder.Decode(&req)
+	var user models.User
+	err := decoder.Decode(&user)
 
 	r.Body = ioutil.NopCloser(b)
 
-	var response models.Response
-	if err != nil {		
+	if err != nil {
+		var response models.Response
 		response.Status  = "error"
-		response.Message = "Parámetros inválidos!"
+		response.Message = "Invalid paramss"
 		respByt,_:= json.Marshal(response)
 
 		w.WriteHeader(400)
@@ -104,7 +97,8 @@ func LoginCustomer(w http.ResponseWriter, r *http.Request, next http.HandlerFunc
 		return
 	}
 
-	if req.Email == "" {	
+	if (user.Email == "") {
+		var response models.Response
 		response.Status  = "error"
 		response.Message = "Email is required"
 		respByt,_:= json.Marshal(response)
@@ -114,8 +108,19 @@ func LoginCustomer(w http.ResponseWriter, r *http.Request, next http.HandlerFunc
 		return
 	}
 
-	if req.Password == "" {
-		
+	if !govalidator.IsEmail(user.Email) {
+		var response models.Response
+		response.Status  = "error"
+		response.Message = "Email is invalid"
+		respByt,_:= json.Marshal(response)
+
+		w.WriteHeader(400)
+		w.Write(respByt)
+		return
+	}
+
+	if (user.Password == "") {
+		var response models.Response
 		response.Status  = "error"
 		response.Message = "Password is required"
 		respByt,_:= json.Marshal(response)
@@ -125,6 +130,5 @@ func LoginCustomer(w http.ResponseWriter, r *http.Request, next http.HandlerFunc
 		return
 	}
 
-	next(w, r)
+	next(w,r)
 }
-

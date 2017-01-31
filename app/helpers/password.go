@@ -1,21 +1,16 @@
 package helpers
 
 import (
-    // Standard library packages 
-    _"encoding/json"
-    _"io/ioutil"
-    "fmt"
-    _"time"
+    // Standard library packages  
+    "fmt"  
     "os"
-    "io"
-    _"reflect"
+    "io"   
     "strings"
-    "crypto/rand"
-    _"crypto/sha1"  
     "crypto/md5"
+    "crypto/rand"      
     "encoding/base32"
 
-    // Third party packages
+    //Third party packages
     //Custom packages       
 )
 

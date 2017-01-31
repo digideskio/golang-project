@@ -11,9 +11,9 @@ import (
 	"github.com/urfave/negroni"
 
 	//Custom packages
-	"bitbucket.org/golang-project/todova_go_service/app/controllers"
-	"bitbucket.org/golang-project/todova_go_service/app/models"
-	"bitbucket.org/golang-project/todova_go_service/app/helpers"
+	"bitbucket.org/rtbathula/golang-project/app/controllers"
+	"bitbucket.org/rtbathula/golang-project/app/models"
+	"bitbucket.org/rtbathula/golang-project/app/validations"
 )
 
 // *****************************************************************************
@@ -63,7 +63,7 @@ var RegisterUser = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request)
 
 /*Desc   : Login Admin
   Params : model User{email,password}
-  Returns: User or error
+  Returns: JWT token or error
 */
 var LoginUser = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	

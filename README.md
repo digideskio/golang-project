@@ -6,6 +6,18 @@ This project is for trying to define the better architecture for golang project.
 
 #Getting Started
 Fork and clone the repository.
+
+#Database connection
+Run MongoDB locally or run through service and add MongoDB connection string config/keys.json file
+
+Example: under config/keys.json
+```
+{
+ "development": {
+    "mongoDBConnection": "mongodb://localhost"
+  }  
+}
+```
 run
 ```
 go run main.go

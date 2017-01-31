@@ -1,0 +1,11 @@
+{    
+  "development": {
+    "mongoDBConnection": "mongodb://localhost",
+    "databaseName"     : "dbname"
+  },
+  "production": {
+    "mongoDBConnection": "mongodb://production:production@ds159208.mlab.com:59208/productionDB",
+    "databaseName"     : "dbname"
+  }
+}
+

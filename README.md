@@ -12,6 +12,21 @@ go run main.go
 ```
 Note: Import golang vendors if required.
 
+#Architecture
+```
+app
+   api
+   controllers
+   models
+   microservices
+   helpers
+   validations
+main.go  
+  
+```
+
+
+
 #REST Routes
 ##Register User
 POST->user/register
